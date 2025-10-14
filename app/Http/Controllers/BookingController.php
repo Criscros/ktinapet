@@ -8,10 +8,38 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
 use App\Models\Pet;
 use App\Models\Booking;
+use Inertia\Inertia;
+use Inertia\Response;
 
 
 class BookingController extends Controller
 {
+    /**
+     * Display a listing of the bookings.
+     */
+    public function index(): Response
+    {
+        $bookings = Booking::with('customer')
+            ->latest('created_at')
+            ->paginate(10)
+            ->through(function ($b) {
+                return [
+                    'id' => $b->id,
+                    'date' => optional($b->date)->format('Y-m-d'),
+                    'notes' => $b->notes,
+                    'services' => $b->services,
+                    'customer_phone' => optional($b->customer)->phone,
+                    'created_at' => optional($b->created_at)->format('Y-m-d H:i'),
+                ];
+            });
+    
+        
+
+        return Inertia::render('Bookings', [
+            'bookings' => $bookings,
+        ]);
+    }
+
     /**
      * Handle incoming public booking data.
      */

@@ -16,7 +16,7 @@ defineProps<Props>();
     <img
         :class="className"
         v-bind="$attrs"
-        src="/logo.jpeg"
+        src="/icon.webp"
         alt="Application Logo"
     />
 </template>
