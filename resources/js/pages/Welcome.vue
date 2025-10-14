@@ -14,7 +14,7 @@ const steps = [
 
 // Form state
 const form = reactive({
-    personal: {  phone: '' },
+    owner: {  phone: '' },
     address: { city: ''},
     pet: { type: 'Dog', breed: '', name: '', weight: '', coat: '' },
     services: { bath: false, groom: false, nails: false, earCleaning: false },
@@ -105,7 +105,7 @@ const validateStep = () => {
       const i = stepIndex.value;
       // minimal required validations per step
       if (i === 0) {
-          const { phone } = form.personal;
+          const { phone } = form.owner;
           return !!phone;
       }
       if (i === 1) {
@@ -250,7 +250,7 @@ const handleBookingSubmit = async () => {
                                 >
                                 <span class="px-2 text-sm text-neutral-500 dark:text-neutral-600">+57</span>
                                 <input
-                                    v-model="form.personal.phone"
+                                    v-model="form.owner.phone"
                                     type="tel"
                                     inputmode="tel"
                                     placeholder="323 280 5247"
