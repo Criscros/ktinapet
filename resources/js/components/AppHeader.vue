@@ -66,6 +66,11 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Posts',
+        href: '/blog',
+        icon: BookOpen,
+    },
 ];
 
 const rightNavItems: NavItem[] = [

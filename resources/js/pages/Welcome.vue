@@ -12,10 +12,14 @@ const steps = [
     'Services',
 ];
 
+// Submit state
+const isSubmitting = ref(false);
+const isSuccess = ref(false);
+
 // Form state
 const form = reactive({
     owner: {  phone: '' },
-    address: { city: ''},
+    address: { city: '', street: ''},
     pet: { type: 'Dog', breed: '', name: '', weight: '', coat: '' },
     services: { bath: false, groom: false, nails: false, earCleaning: false },
 });
@@ -135,30 +139,34 @@ const handleBack = () => {
 };
 
 const handleBookingSubmit = async () => {
-   const payload = JSON.parse(JSON.stringify(form));
-   try {
-       const res = await fetch('/api/bookings', {
-           method: 'POST',
-           headers: {
-               'Content-Type': 'application/json',
-               'Accept': 'application/json',
-               'X-Requested-With': 'XMLHttpRequest',
-           },
-           body: JSON.stringify(payload),
-           credentials: 'same-origin',
-       });
+  if (isSubmitting.value) return;
+  isSubmitting.value = true;
+  const payload = JSON.parse(JSON.stringify(form));
+  try {
+    const res = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: JSON.stringify(payload),
+      credentials: 'same-origin',
+    });
 
-       if (!res.ok) {
-           const errText = await res.text();
-           console.error('Booking failed', res.status, errText);
-           return;
-       }
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('Booking failed', res.status, errText);
+      return;
+    }
 
-       const data = await res.json();
-       console.log('Booking created', data);
-   } catch (error) {
-       console.error('Network error creating booking', error);
-   }
+    await res.json();
+    isSuccess.value = true;
+  } catch (error) {
+    console.error('Network error creating booking', error);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
@@ -223,7 +231,7 @@ const handleBookingSubmit = async () => {
 
                 <!-- Right column -->
                 <div class="w-full flex justify-center">
-                    <div class="mx-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-sm ring-1 ring-black/10 dark:bg-[#161615]">
+                    <div v-if="!isSuccess" class="mx-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-sm ring-1 ring-black/10 dark:bg-[#161615]">
                         <div class="mb-4 flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <img src="/icon.webp" alt="Brand" class="h-10 w-10 rounded-md object-cover" />
@@ -381,10 +389,22 @@ const handleBookingSubmit = async () => {
                             <button v-if="!isLastStep" type="button" @click="handleNext" class="rounded-full bg-pink-600 px-5 py-2.5 text-white text-sm font-medium hover:bg-pink-700">
                                 Next
                             </button>
-                            <button v-else type="button" @click="handleBookingSubmit" class="rounded-full bg-pink-600 px-5 py-2.5 text-white text-sm font-medium hover:bg-pink-700">
-                                Send booking
+                            <button v-else type="button" @click="handleBookingSubmit" :disabled="isSubmitting" class="rounded-full bg-pink-600 px-5 py-2.5 text-white text-sm font-medium hover:bg-pink-700 disabled:opacity-60 disabled:cursor-not-allowed">
+                                <span v-if="isSubmitting" class="inline-flex items-center gap-2">
+                                  <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                  </svg>
+                                  Sending...
+                                </span>
+                                <span v-else>Send booking</span>
                             </button>
                         </div>
+                    </div>
+                    <div v-else class="mx-auto w-full max-w-lg rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-black/10 dark:bg-[#161615]">
+                        <img src="/icon.webp" alt="Brand" class="mx-auto mb-4 h-12 w-12 rounded-md object-cover" />
+                        <h2 class="text-xl font-semibold mb-2 dark:text-neutral-100">Your booking was created</h2>
+                        <p class="text-sm text-neutral-600 dark:text-neutral-300">Soon our team contact you. Thank you.</p>
                     </div>
                 </div>
             </section>

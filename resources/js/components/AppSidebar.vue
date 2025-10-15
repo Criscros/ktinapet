@@ -28,6 +28,11 @@ const mainNavItems: NavItem[] = [
         href: '/bookings',
         icon: BookOpen,
     },
+    {
+        title: 'Posts',
+        href: '/blog',
+        icon: BookOpen,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

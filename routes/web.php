@@ -3,6 +3,7 @@
   use Illuminate\Support\Facades\Route;
   use Inertia\Inertia;
   use App\Http\Controllers\BookingController;
+  use App\Http\Controllers\BlogPostController;
  
   Route::get('/', function () {
       return Inertia::render('Welcome');
@@ -15,6 +16,31 @@
   Route::get('bookings', [BookingController::class, 'index'])
       ->middleware(['auth', 'verified'])
       ->name('bookings');
+ 
+  // Blog routes (explicit, chained style)
+  Route::get('blog', [BlogPostController::class, 'index'])
+      ->middleware(['auth', 'verified'])
+      ->name('blog.index');
+ 
+  Route::get('blog/create', [BlogPostController::class, 'create'])
+      ->middleware(['auth', 'verified'])
+      ->name('blog.create');
+ 
+  Route::post('blog', [BlogPostController::class, 'store'])
+      ->middleware(['auth', 'verified'])
+      ->name('blog.store');
+ 
+  Route::get('blog/{blog}/edit', [BlogPostController::class, 'edit'])
+      ->middleware(['auth', 'verified'])
+      ->name('blog.edit');
+ 
+  Route::put('blog/{blog}', [BlogPostController::class, 'update'])
+      ->middleware(['auth', 'verified'])
+      ->name('blog.update');
+ 
+  Route::delete('blog/{blog}', [BlogPostController::class, 'destroy'])
+      ->middleware(['auth', 'verified'])
+      ->name('blog.destroy');
  
   require __DIR__.'/settings.php';
   require __DIR__.'/auth.php';
