@@ -29,6 +29,8 @@ class BookingController extends Controller
                     'notes' => $b->notes,
                     'services' => $b->services,
                     'customer_phone' => optional($b->customer)->phone,
+                    'customer_address' => optional($b->customer)->address,
+                    'status' => (bool) $b->status,
                     'created_at' => optional($b->created_at)->format('Y-m-d H:i'),
                 ];
             });
@@ -98,5 +100,58 @@ class BookingController extends Controller
             'message' => 'Booking saved',
             'data' => $result,
         ], 201);
+    }
+
+    public function updateStatus(Request $request, Booking $booking): JsonResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'boolean'],
+        ]);
+
+        $booking->update(['status' => $validated['status']]);
+
+        return response()->json([
+            'message' => 'Status updated',
+            'status' => (bool) $booking->status,
+        ]);
+    }
+
+    public function updateNotes(Request $request, Booking $booking): JsonResponse
+    {
+        $validated = $request->validate([
+            'notes' => ['nullable', 'string'],
+            'mode' => ['nullable', 'in:append,replace'],
+        ]);
+
+        $incoming = trim((string) ($validated['notes'] ?? ''));
+
+        if ($incoming === '') {
+            return response()->json([
+                'message' => 'No note provided',
+                'notes' => (string) ($booking->notes ?? ''),
+            ], 422);
+        }
+
+        $mode = $validated['mode'] ?? 'append';
+
+        if ($mode === 'replace') {
+            $booking->update(['notes' => $incoming]);
+            return response()->json([
+                'message' => 'Notes updated',
+                'notes' => (string) ($booking->notes ?? ''),
+            ]);
+        }
+
+        $existing = (string) ($booking->notes ?? '');
+        $combined = $existing !== ''
+            ? rtrim($existing)."\n".$incoming
+            : $incoming;
+
+        $booking->update(['notes' => $combined]);
+
+        return response()->json([
+            'message' => 'Note added',
+            'notes' => (string) ($booking->notes ?? ''),
+        ]);
     }
 }

@@ -21,8 +21,12 @@ class BlogPostController extends Controller
                     'title' => $p->title,
                     'description' => $p->description,
                     'tags' => $p->tags ?? [],
-                    'images' => $p->images ?? [],
-                    'video_url' => $p->video_url,
+                    'images' => collect($p->images ?? [])
+                        ->filter(fn ($path) => !empty($path))
+                        ->map(fn ($path) => Storage::disk('s3')->url($path))
+                        ->values()
+                        ->all(),
+                    'video_url' => $p->video_url ? Storage::disk('s3')->url($p->video_url) : null,
                     'created_at' => optional($p->created_at)->format('Y-m-d H:i'),
                 ];
             });
@@ -43,9 +47,12 @@ class BlogPostController extends Controller
 
         $images = [];
         if ($request->hasFile('images')) {
+
             foreach ($request->file('images') as $file) {
+         
                 if ($file && $file->isValid()) {
-                    $images[] = $file->store('uploads/blog/images', 'public');
+                    
+                    $images[] = $file->store('uploads/blog/images', 's3');
                 }
             }
         }
@@ -54,7 +61,7 @@ class BlogPostController extends Controller
         if ($request->hasFile('video')) {
             $file = $request->file('video');
             if ($file && $file->isValid()) {
-                $videoPath = $file->store('uploads/blog/videos', 'public');
+                $videoPath = $file->storePublicly('uploads/blog/videos', 's3');
             }
         }
 
@@ -77,8 +84,12 @@ class BlogPostController extends Controller
                 'title' => $blog->title,
                 'description' => $blog->description,
                 'tags' => $blog->tags ?? [],
-                'images' => $blog->images ?? [],
-                'video_url' => $blog->video_url,
+                'images' => collect($blog->images ?? [])
+                    ->filter(fn ($path) => !empty($path))
+                    ->map(fn ($path) => Storage::disk('s3')->url($path))
+                    ->values()
+                    ->all(),
+                'video_url' => $blog->video_url ? Storage::disk('s3')->url($blog->video_url) : null,
                 'created_at' => optional($blog->created_at)->format('Y-m-d H:i'),
             ],
         ]);
@@ -96,23 +107,23 @@ class BlogPostController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 if ($file && $file->isValid()) {
-                    $images[] = $file->store('uploads/blog/images', 'public');
+                    $images[] = $file->store('uploads/blog/images', 's3');
                 }
             }
         }
 
         $videoPath = $blog->video_url;
         if ($request->boolean('reset_video') && $videoPath) {
-            Storage::disk('public')->delete($videoPath);
+            Storage::disk('s3')->delete($videoPath);
             $videoPath = null;
         }
         if ($request->hasFile('video')) {
             if ($videoPath) {
-                Storage::disk('public')->delete($videoPath);
+                Storage::disk('s3')->delete($videoPath);
             }
             $file = $request->file('video');
             if ($file && $file->isValid()) {
-                $videoPath = $file->store('uploads/blog/videos', 'public');
+                $videoPath = $file->store('uploads/blog/videos', 's3');
             }
         }
 
@@ -131,7 +142,7 @@ class BlogPostController extends Controller
     {
         $this->deleteMedia($blog->images ?? []);
         if ($blog->video_url) {
-            Storage::disk('public')->delete($blog->video_url);
+            Storage::disk('s3')->delete($blog->video_url);
         }
         $blog->delete();
         return redirect()->route('blog.index');
@@ -168,7 +179,9 @@ class BlogPostController extends Controller
     private function deleteMedia(array $images): void
     {
         foreach ($images as $path) {
-            Storage::disk('public')->delete($path);
+            if (!empty($path)) {
+                Storage::disk('s3')->delete($path);
+            }
         }
     }
 }

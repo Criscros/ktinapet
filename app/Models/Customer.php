@@ -11,7 +11,7 @@ class Customer extends Model
 
     use HasFactory;
 
-    protected $fillable = ['phone'];
+    protected $fillable = ['phone', 'address'];
 
 
     public function pets()

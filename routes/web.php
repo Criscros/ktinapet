@@ -17,6 +17,14 @@
       ->middleware(['auth', 'verified'])
       ->name('bookings');
  
+  Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])
+      ->middleware(['auth', 'verified'])
+      ->name('bookings.status');
+ 
+  Route::patch('bookings/{booking}/notes', [BookingController::class, 'updateNotes'])
+      ->middleware(['auth', 'verified'])
+      ->name('bookings.notes');
+ 
   // Blog routes (explicit, chained style)
   Route::get('blog', [BlogPostController::class, 'index'])
       ->middleware(['auth', 'verified'])

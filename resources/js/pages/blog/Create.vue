@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -14,6 +14,21 @@ const description = ref('');
 const tagsText = ref('');
 const images = ref<FileList | null>(null);
 const video = ref<File | null>(null);
+
+const imagePreviews = ref<string[]>([]);
+
+const handleImagesChange = (e: Event) => {
+  const target = e.target as HTMLInputElement | null;
+  const files = target?.files || null;
+  // revoke previous URLs before replacing
+  imagePreviews.value.forEach((u) => URL.revokeObjectURL(u));
+  images.value = files;
+  imagePreviews.value = files ? Array.from(files).map((f) => URL.createObjectURL(f)) : [];
+};
+
+onUnmounted(() => {
+  imagePreviews.value.forEach((u) => URL.revokeObjectURL(u));
+});
 
 const handleSubmit = () => {
   const form = new FormData();
@@ -53,7 +68,10 @@ const handleSubmit = () => {
           </div>
           <div>
             <label class="block text-sm mb-1">Imágenes</label>
-            <input type="file" multiple accept="image/*" @change="(e:any)=>{ images = e.target.files }" />
+            <input type="file" multiple accept="image/*" @change="handleImagesChange" />
+            <div v-if="imagePreviews.length" class="mt-2 grid grid-cols-3 gap-2">
+              <img v-for="(src, idx) in imagePreviews" :key="idx" :src="src" class="h-24 w-full object-cover rounded border" />
+            </div>
           </div>
           <div>
             <label class="block text-sm mb-1">Video</label>

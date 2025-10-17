@@ -8,11 +8,12 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id','date','notes','services'];
+    protected $fillable = ['customer_id','date','notes','services','status'];
 
     protected $casts = [
         'services' => 'array',
         'date' => 'date',
+        'status' => 'boolean',
     ];
 
     public function customer()
