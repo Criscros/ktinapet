@@ -51,17 +51,17 @@ class BlogPostController extends Controller
             foreach ($request->file('images') as $file) {
          
                 if ($file && $file->isValid()) {
-                    
                     $images[] = $file->store('uploads/blog/images', 's3');
                 }
             }
         }
 
-        $videoPath = null;
-        if ($request->hasFile('video')) {
+        // Prefer presigned upload key when present
+        $videoPath = $request->string('video_key')->toString() ?: null;
+        if (!$videoPath && $request->hasFile('video')) {
             $file = $request->file('video');
             if ($file && $file->isValid()) {
-                $videoPath = $file->storePublicly('uploads/blog/videos', 's3');
+                $videoPath = $file->store('uploads/blog/videos', 's3');
             }
         }
 
@@ -117,7 +117,13 @@ class BlogPostController extends Controller
             Storage::disk('s3')->delete($videoPath);
             $videoPath = null;
         }
-        if ($request->hasFile('video')) {
+        // If a new presigned key is provided, replace existing
+        if ($request->filled('video_key')) {
+            if ($videoPath) {
+                Storage::disk('s3')->delete($videoPath);
+            }
+            $videoPath = $request->string('video_key')->toString();
+        } elseif ($request->hasFile('video')) {
             if ($videoPath) {
                 Storage::disk('s3')->delete($videoPath);
             }
@@ -155,7 +161,9 @@ class BlogPostController extends Controller
             'description' => ['nullable', 'string'],
             'tags' => ['nullable'],
             'images.*' => ['nullable', 'image', 'max:5120'],
+            // Accept either a direct file upload or a presigned S3 key for videos
             'video' => ['nullable', 'file', 'mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-matroska', 'max:51200'],
+            'video_key' => ['nullable', 'string'],
             'reset_images' => ['nullable', 'boolean'],
             'reset_video' => ['nullable', 'boolean'],
         ];

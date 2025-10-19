@@ -4,6 +4,7 @@
   use Inertia\Inertia;
   use App\Http\Controllers\BookingController;
   use App\Http\Controllers\BlogPostController;
+  use App\Http\Controllers\S3Controller;
  
   Route::get('/', function () {
       return Inertia::render('Welcome');
@@ -49,6 +50,11 @@
   Route::delete('blog/{blog}', [BlogPostController::class, 'destroy'])
       ->middleware(['auth', 'verified'])
       ->name('blog.destroy');
- 
+
+  // S3 presign (videos only)
+  Route::get('/s3/presign', [S3Controller::class, 'presign'])
+      ->middleware(['auth', 'verified'])
+      ->name('s3.presign');
+
   require __DIR__.'/settings.php';
   require __DIR__.'/auth.php';

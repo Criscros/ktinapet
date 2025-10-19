@@ -14,6 +14,8 @@ const description = ref('');
 const tagsText = ref('');
 const images = ref<FileList | null>(null);
 const video = ref<File | null>(null);
+const contentType = ref<'images' | 'video' | ''>('');
+const uploading = ref(false);
 
 const imagePreviews = ref<string[]>([]);
 
@@ -30,16 +32,68 @@ onUnmounted(() => {
   imagePreviews.value.forEach((u) => URL.revokeObjectURL(u));
 });
 
+const handleVideoChange = (e: Event) => {
+  const target = e.target as HTMLInputElement | null;
+  const file = target?.files?.[0] || null;
+  video.value = file;
+};
+
+const handleContentTypeChange = () => {
+  if (contentType.value === 'images') {
+    video.value = null;
+    return;
+  }
+  if (contentType.value === 'video') {
+    images.value = null;
+    imagePreviews.value.forEach((u) => URL.revokeObjectURL(u));
+    imagePreviews.value = [];
+  }
+};
+
 const handleSubmit = () => {
   const form = new FormData();
   form.append('title', title.value);
   if (description.value) form.append('description', description.value);
   if (tagsText.value) form.append('tags', tagsText.value);
-  if (images.value) {
+  if (contentType.value === 'images' && images.value) {
     Array.from(images.value).forEach((f) => form.append('images[]', f));
   }
-  if (video.value) form.append('video', video.value);
+  if (contentType.value === 'video' && video.value) {
+    // Defer posting until upload completes
+    uploadVideoToS3(video.value)
+      .then((key) => {
+        if (!key) return;
+        form.append('video_key', key);
+        router.post('/blog', form, { forceFormData: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Error subiendo el video. Intenta nuevamente.');
+      });
+    return;
+  }
   router.post('/blog', form, { forceFormData: true });
+};
+
+const uploadVideoToS3 = async (file: File): Promise<string | null> => {
+  try {
+    
+    uploading.value = true;
+    const qs = new URLSearchParams({ filename: file.name, contentType: file.type });
+    const presignRes = await fetch(`/s3/presign?${qs.toString()}`, { method: 'GET', credentials: 'same-origin' });
+ 
+
+    const { url, key } = await presignRes.json();
+    const putRes = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: file,
+    });
+    if (!putRes.ok) throw new Error('Falló la subida a S3');
+    return key as string;
+  } finally {
+    uploading.value = false;
+  }
 };
 </script>
 
@@ -67,15 +121,30 @@ const handleSubmit = () => {
             <input v-model="tagsText" type="text" placeholder="ej: perro, grooming, oferta" class="w-full rounded border px-3 py-2 text-sm" />
           </div>
           <div>
+            <label class="block text-sm mb-1">Tipo de contenido</label>
+            <select
+              v-model="contentType"
+              @change="handleContentTypeChange"
+              class="w-full rounded-md border border-gray-700 bg-black text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-500 transition"
+              required
+            >
+              <option disabled value="">Selecciona...</option>
+              <option value="images">Imágenes</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div v-if="contentType === 'images'">
             <label class="block text-sm mb-1">Imágenes</label>
             <input type="file" multiple accept="image/*" @change="handleImagesChange" />
             <div v-if="imagePreviews.length" class="mt-2 grid grid-cols-3 gap-2">
               <img v-for="(src, idx) in imagePreviews" :key="idx" :src="src" class="h-24 w-full object-cover rounded border" />
             </div>
           </div>
-          <div>
+          <div v-if="contentType === 'video'">
             <label class="block text-sm mb-1">Video</label>
-            <input type="file" accept="video/*" @change="(e:any)=>{ video = e.target.files?.[0] || null }" />
+            <input 
+              type="file" accept="video/*" 
+              @change="handleVideoChange" />
           </div>
           <div class="pt-2">
             <button type="submit" class="rounded bg-neutral-900 px-3 py-1 text-white dark:bg-white dark:text-neutral-900 text-sm">Guardar</button>

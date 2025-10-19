@@ -82,7 +82,7 @@ const handleSubmit = () => {
               <label class="flex items-center gap-2 text-xs"><input type="checkbox" v-model="resetImages" /> Resetear imágenes</label>
             </div>
             <div v-if="hasExistingImages && !resetImages" class="flex gap-2 flex-wrap">
-              <img v-for="(img, idx) in existingImages" :key="idx" :src="`/storage/${img}`" class="h-20 w-20 object-cover rounded border" />
+              <img v-for="(img, idx) in existingImages" :key="idx" :src="`${img}`" class="h-20 w-20 object-cover rounded border" />
             </div>
             <div>
               <label class="block text-sm mb-1">Añadir nuevas imágenes</label>
