@@ -34,6 +34,19 @@
         <div class="action-label">{{ comments }}</div>
       </div>
 
+      <div class="action-btn" :title="videoRef?.muted ? 'Unmute' : 'Mute'" @click.stop="toggleMute">
+        <svg v-if="videoRef?.muted" class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 9v6h4l5 4V5l-5 4H5z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 8l5 5M21 8l-5 5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <svg v-else class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 9v6h4l5 4V5l-5 4H5z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M19 12c0-2.8-2.2-5-5-5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M21 12c0-4-3-7-7-7" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <div class="action-label">{{ videoRef?.muted ? 'Unmute' : 'Mute' }}</div>
+      </div>
+
       <div class="action-btn" title="Share">
         <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8 7l4-4 4 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         <div class="action-label">Share</div>
@@ -97,7 +110,7 @@ const channelName = computed(() => 'News')
 const channelHandle = computed(() => 'ktinapet')
 const views = computed(() => '')
 const song = computed(() => (current.value?.tags?.length ? current.value.tags.join(' • ') : 'Original audio'))
-const avatar = computed(() => '/favicon.svg')
+const avatar = computed(() => '/logo.jpeg')
 
 const likes = ref('')
 const comments = ref(0)
@@ -107,6 +120,17 @@ const videoRef = ref<HTMLVideoElement | null>(null)
 const shortEl = ref<HTMLDivElement | null>(null)
 const progress = ref(0)
 const showCenter = ref(true)
+
+const getIndexById = (id: string | number) => {
+  const list = props.posts || []
+  return list.findIndex(p => String(p.id) === String(id))
+}
+
+const updateUrl = (postId: number) => {
+  const url = new URL(window.location.href)
+  url.searchParams.set('short', String(postId))
+  window.history.replaceState({}, '', url.toString())
+}
 
 const goTo = async (i: number) => {
   if (i < 0 || i >= total.value) return
@@ -119,6 +143,7 @@ const goTo = async (i: number) => {
     videoRef.value.load()
     await videoRef.value.play()
     showCenter.value = false
+    if (current.value) updateUrl(current.value.id)
   } catch (_) {}
 }
 
@@ -168,6 +193,19 @@ onMounted(() => {
   videoRef.value.addEventListener('loadedmetadata', () => { progress.value = 0 })
   videoRef.value.addEventListener('ended', () => { handleNext() })
   window.addEventListener('keydown', onKey)
+  // initialize from URL if ?short is present
+  const url = new URL(window.location.href)
+  const shortId = url.searchParams.get('short')
+  if (shortId) {
+    const idx = getIndexById(shortId)
+    if (idx >= 0) {
+      // jump without creating history entry
+      goTo(idx)
+      return
+    }
+  }
+  // ensure URL reflects initial post
+  if (current.value) updateUrl(current.value.id)
 })
 
 onBeforeUnmount(() => {
@@ -186,6 +224,7 @@ function onKey(e: KeyboardEvent) {
   }
   if (e.code === 'ArrowDown') { e.preventDefault(); handleNext(); return }
   if (e.code === 'ArrowUp') { e.preventDefault(); handlePrev(); return }
+  if (e.code === 'KeyM') { e.preventDefault(); toggleMute(); return }
 }
 
 let wheelLocked = false

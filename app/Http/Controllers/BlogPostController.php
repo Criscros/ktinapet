@@ -23,15 +23,41 @@ class BlogPostController extends Controller
                     'tags' => $p->tags ?? [],
                     'images' => collect($p->images ?? [])
                         ->filter(fn ($path) => !empty($path))
-                        ->map(fn ($path) => Storage::disk('s3')->url($path))
+                        ->map(fn ($path) => $this->s3Url($path))
                         ->values()
                         ->all(),
-                    'video_url' => $p->video_url ? Storage::disk('s3')->url($p->video_url) : null,
+                    'video_url' => $p->video_url ? $this->s3Url($p->video_url) : null,
                     'created_at' => optional($p->created_at)->format('Y-m-d H:i'),
                 ];
             });
 
         return Inertia::render('blog/Index', [
+            'posts' => $posts,
+        ]);
+    }
+
+    public function news(): Response
+    {
+        $posts = BlogPost::query()
+            ->latest('id')
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'title' => $p->title,
+                    'description' => $p->description,
+                    'tags' => $p->tags ?? [],
+                    'images' => collect($p->images ?? [])
+                        ->filter(fn ($path) => !empty($path))
+                        ->map(fn ($path) => $this->s3Url($path))
+                        ->values()
+                        ->all(),
+                    'video_url' => $p->video_url ? $this->s3Url($p->video_url) : null,
+                    'created_at' => optional($p->created_at)->toAtomString(),
+                ];
+            });
+
+        return Inertia::render('news/Index', [
             'posts' => $posts,
         ]);
     }
@@ -86,10 +112,10 @@ class BlogPostController extends Controller
                 'tags' => $blog->tags ?? [],
                 'images' => collect($blog->images ?? [])
                     ->filter(fn ($path) => !empty($path))
-                    ->map(fn ($path) => Storage::disk('s3')->url($path))
+                    ->map(fn ($path) => $this->s3Url($path))
                     ->values()
                     ->all(),
-                'video_url' => $blog->video_url ? Storage::disk('s3')->url($blog->video_url) : null,
+                'video_url' => $blog->video_url ? $this->s3Url($blog->video_url) : null,
                 'created_at' => optional($blog->created_at)->format('Y-m-d H:i'),
             ],
         ]);
@@ -191,5 +217,12 @@ class BlogPostController extends Controller
                 Storage::disk('s3')->delete($path);
             }
         }
+    }
+
+    private function s3Url(string $path): string
+    {
+        $base = config('filesystems.disks.s3.url')
+            ?? rtrim(env('AWS_URL', 'https://katinapet.s3.amazonaws.com'), '/');
+        return $base . '/' . ltrim($path, '/');
     }
 }
