@@ -86,6 +86,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from 'vue'
+import PublicLayout from '@/layouts/PublicLayout.vue'
+
+defineOptions({ layout: PublicLayout })
 
 type Post = {
   id: number

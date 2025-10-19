@@ -14,6 +14,21 @@
   // Public news page (serve posts with absolute S3 URLs)
   Route::get('/news', [BlogPostController::class, 'news'])->name('news.index');
 
+  // Public services page
+  Route::get('/servicios', function () {
+      return Inertia::render('services/Index');
+  })->name('services.index');
+
+  // Public about page
+  Route::get('/nosotros', function () {
+      return Inertia::render('about/Index');
+  })->name('about.index');
+
+  // Public contact page
+  Route::get('/contactanos', function () {
+      return Inertia::render('contact/Index');
+  })->name('contact.index');
+
   Route::get('dashboard', function () {
       return Inertia::render('Dashboard');
   })->middleware(['auth', 'verified'])->name('dashboard');
