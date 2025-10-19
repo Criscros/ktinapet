@@ -5,11 +5,23 @@
   use App\Http\Controllers\BookingController;
   use App\Http\Controllers\BlogPostController;
   use App\Http\Controllers\S3Controller;
+  use App\Models\BlogPost;
  
   Route::get('/', function () {
       return Inertia::render('Welcome');
   })->name('home');
- 
+
+  // Public news page
+  Route::get('/news', function () {
+      $posts = BlogPost::query()
+          ->latest('id')
+          ->get(['id', 'title', 'description', 'tags', 'images', 'video_url', 'created_at']);
+
+      return Inertia::render('news/Index', [
+          'posts' => $posts,
+      ]);
+  })->name('news.index');
+
   Route::get('dashboard', function () {
       return Inertia::render('Dashboard');
   })->middleware(['auth', 'verified'])->name('dashboard');
