@@ -5,6 +5,7 @@
   use App\Http\Controllers\BookingController;
   use App\Http\Controllers\BlogPostController;
   use App\Http\Controllers\S3Controller;
+  use App\Http\Controllers\TextBlogController;
   use App\Models\BlogPost;
  
   Route::get('/', function () {
@@ -49,7 +50,42 @@
   Route::get('blog', [BlogPostController::class, 'index'])
       ->middleware(['auth', 'verified'])
       ->name('blog.index');
- 
+
+  // Text blog create (TinyMCE)
+  Route::get('textblog/create', [TextBlogController::class, 'create'])
+      ->middleware(['auth', 'verified'])
+      ->name('textblog.create');
+
+  // Text blog admin CRUD
+  Route::get('textblog', [TextBlogController::class, 'index'])
+      ->middleware(['auth', 'verified'])
+      ->name('textblog.index');
+  Route::post('textblog', [TextBlogController::class, 'store'])
+      ->middleware(['auth', 'verified'])
+      ->name('textblog.store');
+  Route::get('textblog/{textblog}/edit', [TextBlogController::class, 'edit'])
+      ->middleware(['auth', 'verified'])
+      ->name('textblog.edit');
+  Route::put('textblog/{textblog}', [TextBlogController::class, 'update'])
+      ->middleware(['auth', 'verified'])
+      ->name('textblog.update');
+  Route::delete('textblog/{textblog}', [TextBlogController::class, 'destroy'])
+      ->middleware(['auth', 'verified'])
+      ->name('textblog.destroy');
+
+  // Public list (typo requested: /bologs)
+  Route::get('bologs', [TextBlogController::class, 'publicIndex'])
+      ->name('textblog.public');
+  // Public list alias: /blogs
+  Route::get('blogs', [TextBlogController::class, 'publicIndex'])
+      ->name('textblog.public.alias');
+
+  // Public show routes
+  Route::get('blogs/{textblog}', [TextBlogController::class, 'show'])
+      ->name('textblog.show');
+  Route::get('bologs/{textblog}', [TextBlogController::class, 'show'])
+      ->name('textblog.show.alias');
+
   Route::get('blog/create', [BlogPostController::class, 'create'])
       ->middleware(['auth', 'verified'])
       ->name('blog.create');
