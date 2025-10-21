@@ -170,3 +170,27 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Blog post content styles */
+@layer components {
+    .blog-post__body {
+        @apply text-white;
+    }
+    
+    .blog-post__body * {
+        @apply text-white;
+    }
+    
+    .blog-post__body p,
+    .blog-post__body h1,
+    .blog-post__body h2,
+    .blog-post__body h3,
+    .blog-post__body h4,
+    .blog-post__body h5,
+    .blog-post__body h6,
+    .blog-post__body li,
+    .blog-post__body span,
+    .blog-post__body div {
+        color: white !important;
+    }
+}
