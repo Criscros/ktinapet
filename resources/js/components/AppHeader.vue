@@ -68,7 +68,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Posts',
-        href: '/blog',
+        href: '/multimedia',
         icon: BookOpen,
     },
 ];

@@ -4,7 +4,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import type { BreadcrumbItem } from '@/types';
 
 const props = defineProps<{
-  posts: {
+  multimedia: {
     data: Array<{
       id: number;
       title: string;
@@ -19,27 +19,27 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Posts', href: '/blog' },
+  { title: 'Multimedia', href: '/multimedia' },
 ];
 
 const handleDelete = (id: number) => {
   if (!confirm('Eliminar este post?')) return;
-  router.delete(`/blog/${id}`);
+  router.delete(`/multimedia/${id}`);
 };
 </script>
 
 <template>
-  <Head title="Admin · Posts" />
+  <Head title="Admin · Multimedia" />
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex items-center justify-between">
-        <h1 class="text-xl font-semibold">Posts</h1>
-        <Link href="/blog/create" class="rounded bg-neutral-900 px-3 py-1 text-white dark:bg-white dark:text-neutral-900 text-sm">Nuevo</Link>
+        <h1 class="text-xl font-semibold">Multimedia</h1>
+        <Link href="/multimedia/create" class="rounded bg-neutral-900 px-3 py-1 text-white dark:bg-white dark:text-neutral-900 text-sm">Nuevo</Link>
       </div>
 
       <div class="relative flex-1 rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-        <div v-if="!props.posts?.data?.length" class="text-sm text-neutral-500 dark:text-neutral-300">
-          No hay posts aún.
+        <div v-if="!props.multimedia?.data?.length" class="text-sm text-neutral-500 dark:text-neutral-300">
+          No hay Multimedia  aún.
         </div>
 
         <div v-else class="flex h-full flex-col">
@@ -55,13 +55,13 @@ const handleDelete = (id: number) => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="row in props.posts.data" :key="row.id" class="border-b border-sidebar-border/40">
+                <tr v-for="row in props.multimedia.data" :key="row.id" class="border-b border-sidebar-border/40">
                   <td class="py-2 pr-4">{{ row.id }}</td>
                   <td class="py-2 pr-4 max-w-[28rem] truncate" :title="row.title">{{ row.title }}</td>
                   <td class="py-2 pr-4">{{ (row.tags || []).join(', ') }}</td>
                   <td class="py-2 pr-4 whitespace-nowrap">{{ row.created_at || '-' }}</td>
                   <td class="py-2 pr-4 whitespace-nowrap flex items-center gap-2">
-                    <Link :href="`/blog/${row.id}/edit`" class="text-xs underline">Editar</Link>
+                    <Link :href="`/multimedia/${row.id}/edit`" class="text-xs underline">Editar</Link>
                     <button class="text-xs text-red-600" @click="handleDelete(row.id)">Eliminar</button>
                   </td>
                 </tr>
@@ -69,9 +69,9 @@ const handleDelete = (id: number) => {
             </table>
           </div>
 
-          <div v-if="props.posts.links?.length" class="mt-4 flex flex-wrap items-center gap-2 self-end">
+          <div v-if="props.multimedia.links?.length" class="mt-4 flex flex-wrap items-center gap-2 self-end">
             <Link
-              v-for="(l, idx) in props.posts.links"
+              v-for="(l, idx) in props.multimedia.links"
               :key="idx"
               :href="l.url || '#'"
               :class="[

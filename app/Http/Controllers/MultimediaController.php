@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BlogPost;
+use App\Models\MultiMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class BlogPostController extends Controller
+class MultimediaController extends Controller
 {
     public function index(): Response
     {
-        $posts = BlogPost::latest('created_at')
+        $multimedia = MultiMedia::latest('created_at')
             ->paginate(10)
             ->through(function ($p) {
                 return [
@@ -31,14 +31,14 @@ class BlogPostController extends Controller
                 ];
             });
 
-        return Inertia::render('blog/Index', [
-            'posts' => $posts,
+        return Inertia::render('multimedia/Index', [
+            'multimedia' => $multimedia,
         ]);
     }
 
     public function news(): Response
     {
-        $posts = BlogPost::query()
+        $posts = MultiMedia::query()
             ->latest('id')
             ->get()
             ->map(function ($p) {
@@ -64,7 +64,7 @@ class BlogPostController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('blog/Create');
+        return Inertia::render('multimedia/Create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -77,7 +77,7 @@ class BlogPostController extends Controller
             foreach ($request->file('images') as $file) {
          
                 if ($file && $file->isValid()) {
-                    $images[] = $file->store('uploads/blog/images', 's3');
+                    $images[] = $file->store('uploads/multimedia/images', 's3');
                 }
             }
         }
@@ -87,11 +87,11 @@ class BlogPostController extends Controller
         if (!$videoPath && $request->hasFile('video')) {
             $file = $request->file('video');
             if ($file && $file->isValid()) {
-                $videoPath = $file->store('uploads/blog/videos', 's3');
+                $videoPath = $file->store('uploads/multimedia/videos', 's3');
             }
         }
 
-        $post = BlogPost::create([
+        $post = MultiMedia::create([
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
             'tags' => $data['tags'] ?? [],
@@ -99,33 +99,33 @@ class BlogPostController extends Controller
             'video_url' => $videoPath,
         ]);
 
-        return redirect()->route('blog.index');
+        return redirect()->route('multimedia.index');
     }
 
-    public function edit(BlogPost $blog): Response
+    public function edit(MultiMedia $media): Response
     {
-        return Inertia::render('blog/Edit', [
+        return Inertia::render('multimedia/Edit', [
             'post' => [
-                'id' => $blog->id,
-                'title' => $blog->title,
-                'description' => $blog->description,
-                'tags' => $blog->tags ?? [],
-                'images' => collect($blog->images ?? [])
+                'id' => $media->id,
+                'title' => $media->title,
+                'description' => $media->description,
+                'tags' => $media->tags ?? [],
+                'images' => collect($media->images ?? [])
                     ->filter(fn ($path) => !empty($path))
                     ->map(fn ($path) => $this->s3Url($path))
                     ->values()
                     ->all(),
-                'video_url' => $blog->video_url ? $this->s3Url($blog->video_url) : null,
-                'created_at' => optional($blog->created_at)->format('Y-m-d H:i'),
+                'video_url' => $media->video_url ? $this->s3Url($media->video_url) : null,
+                'created_at' => optional($media->created_at)->format('Y-m-d H:i'),
             ],
         ]);
     }
 
-    public function update(Request $request, BlogPost $blog): RedirectResponse
+    public function update(Request $request, MultiMedia $media): RedirectResponse
     {
         $data = $this->validatePayload($request, false);
 
-        $images = $blog->images ?? [];
+        $images = $media->images ?? [];
         if ($request->boolean('reset_images')) {
             $this->deleteMedia($images);
             $images = [];
@@ -133,12 +133,12 @@ class BlogPostController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 if ($file && $file->isValid()) {
-                    $images[] = $file->store('uploads/blog/images', 's3');
+                    $images[] = $file->store('uploads/multimedia/images', 's3');
                 }
             }
         }
 
-        $videoPath = $blog->video_url;
+        $videoPath = $media->video_url;
         if ($request->boolean('reset_video') && $videoPath) {
             Storage::disk('s3')->delete($videoPath);
             $videoPath = null;
@@ -155,29 +155,29 @@ class BlogPostController extends Controller
             }
             $file = $request->file('video');
             if ($file && $file->isValid()) {
-                $videoPath = $file->store('uploads/blog/videos', 's3');
+                $videoPath = $file->store('uploads/multimedia/videos', 's3');
             }
         }
 
-        $blog->update([
-            'title' => $data['title'] ?? $blog->title,
-            'description' => array_key_exists('description', $data) ? $data['description'] : $blog->description,
-            'tags' => array_key_exists('tags', $data) ? $data['tags'] : ($blog->tags ?? []),
+        $media->update([
+            'title' => $data['title'] ?? $media->title,
+            'description' => array_key_exists('description', $data) ? $data['description'] : $media->description,
+            'tags' => array_key_exists('tags', $data) ? $data['tags'] : ($media->tags ?? []),
             'images' => $images ?: null,
             'video_url' => $videoPath,
         ]);
 
-        return redirect()->route('blog.index');
+        return redirect()->route('multimedia.index');
     }
 
-    public function destroy(BlogPost $blog): RedirectResponse
+    public function destroy(MultiMedia $media): RedirectResponse
     {
-        $this->deleteMedia($blog->images ?? []);
-        if ($blog->video_url) {
-            Storage::disk('s3')->delete($blog->video_url);
+        $this->deleteMedia($media->images ?? []);
+        if ($media->video_url) {
+            Storage::disk('s3')->delete($media->video_url);
         }
-        $blog->delete();
-        return redirect()->route('blog.index');
+        $media->delete();
+        return redirect()->route('multimedia.index');
     }
 
     private function validatePayload(Request $request, bool $requireTitle = true): array

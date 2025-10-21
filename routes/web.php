@@ -3,7 +3,7 @@
   use Illuminate\Support\Facades\Route;
   use Inertia\Inertia;
   use App\Http\Controllers\BookingController;
-  use App\Http\Controllers\BlogPostController;
+  use App\Http\Controllers\MultimediaController;
   use App\Http\Controllers\S3Controller;
   use App\Http\Controllers\TextBlogController;
   use App\Models\BlogPost;
@@ -11,9 +11,6 @@
   Route::get('/', function () {
       return Inertia::render('Welcome');
   })->name('home');
-
-  // Public news page (serve posts with absolute S3 URLs)
-  Route::get('/news', [BlogPostController::class, 'news'])->name('news.index');
 
   // Public services page
   Route::get('/servicios', function () {
@@ -46,10 +43,24 @@
       ->middleware(['auth', 'verified'])
       ->name('bookings.notes');
  
-  // Blog routes (explicit, chained style)
-  Route::get('blog', [BlogPostController::class, 'index'])
-      ->middleware(['auth', 'verified'])
-      ->name('blog.index');
+
+  // Public news page (serve posts with absolute S3 URLs)
+  Route::get('/news', [MultimediaController::class, 'news'])->name('news.index');
+
+
+  
+  // Multimedia 
+    Route::middleware(['auth', 'verified'])
+        ->prefix('multimedia')
+        ->name('multimedia.')
+        ->group(function () {
+            Route::get('/', [MultimediaController::class, 'index'])->name('index');
+            Route::get('/create', [MultimediaController::class, 'create'])->name('create');
+            Route::post('/', [MultimediaController::class, 'store'])->name('store');
+            Route::get('/{multimedia}/edit', [MultimediaController::class, 'edit'])->name('edit');
+            Route::put('/{multimedia}', [MultimediaController::class, 'update'])->name('update');
+            Route::delete('/{multimedia}', [MultimediaController::class, 'destroy'])->name('destroy');
+        });
 
   // Text blog create (TinyMCE)
   Route::get('textblog/create', [TextBlogController::class, 'create'])
@@ -85,26 +96,6 @@
       ->name('textblog.show');
   Route::get('bologs/{textblog}', [TextBlogController::class, 'show'])
       ->name('textblog.show.alias');
-
-  Route::get('blog/create', [BlogPostController::class, 'create'])
-      ->middleware(['auth', 'verified'])
-      ->name('blog.create');
- 
-  Route::post('blog', [BlogPostController::class, 'store'])
-      ->middleware(['auth', 'verified'])
-      ->name('blog.store');
- 
-  Route::get('blog/{blog}/edit', [BlogPostController::class, 'edit'])
-      ->middleware(['auth', 'verified'])
-      ->name('blog.edit');
- 
-  Route::put('blog/{blog}', [BlogPostController::class, 'update'])
-      ->middleware(['auth', 'verified'])
-      ->name('blog.update');
- 
-  Route::delete('blog/{blog}', [BlogPostController::class, 'destroy'])
-      ->middleware(['auth', 'verified'])
-      ->name('blog.destroy');
 
   // S3 presign (videos only)
   Route::get('/s3/presign', [S3Controller::class, 'presign'])

@@ -17,8 +17,8 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Posts', href: '/blog' },
-  { title: 'Editar', href: `/blog/${props.post.id}/edit` },
+  { title: 'Multimedia', href: '/multimedia' },
+  { title: 'Editar', href: `/multimedia/${props.post.id}/edit` },
 ];
 
 const title = ref(props.post.title || '');

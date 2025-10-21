@@ -29,8 +29,8 @@ const mainNavItems: NavItem[] = [
         icon: BookOpen,
     },
     {
-        title: 'Posts',
-        href: '/blog',
+        title: 'Multimedia',
+        href: '/multimedia',
         icon: BookOpen,
     },
 ];

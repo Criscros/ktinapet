@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('multi_media', function (Blueprint $table) {
             $table->id();
-            $table->string('phone')->nullable();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->json('tags')->nullable();
+            $table->json('images')->nullable();
+            $table->string('video_url')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('multi_media');
     }
 };

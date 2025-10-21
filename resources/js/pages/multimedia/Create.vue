@@ -64,7 +64,7 @@ const handleSubmit = () => {
       .then((key) => {
         if (!key) return;
         form.append('video_key', key);
-        router.post('/blog', form, { forceFormData: true });
+        router.post('/multimedia', form, { forceFormData: true });
       })
       .catch((err) => {
         console.error(err);
@@ -72,7 +72,7 @@ const handleSubmit = () => {
       });
     return;
   }
-  router.post('/blog', form, { forceFormData: true });
+  router.post('/multimedia', form, { forceFormData: true });
 };
 
 const uploadVideoToS3 = async (file: File): Promise<string | null> => {
@@ -103,7 +103,7 @@ const uploadVideoToS3 = async (file: File): Promise<string | null> => {
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold">Nuevo Post</h1>
-        <Link href="/blog" class="text-sm underline">Volver</Link>
+        <Link href="/multimedia" class="text-sm underline">Volver</Link>
       </div>
 
       <div class="relative flex-1 rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border max-w-3xl">
