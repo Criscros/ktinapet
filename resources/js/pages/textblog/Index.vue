@@ -6,17 +6,17 @@ const props = defineProps<{ items: Array<{ id: number; title: string; tags?: str
 
 const handleDelete = (id: number) => {
   if (!confirm('Eliminar este post?')) return;
-  router.delete(`/textblog/${id}`);
+  router.delete(`/posts/${id}`);
 };
 </script>
 
 <template>
-  <Head title="Admin · TextBlog" />
-  <AppLayout :breadcrumbs="[{ title: 'Posts', href: '/textblog' }]">
+  <Head title="Admin · Posts" />
+  <AppLayout :breadcrumbs="[{ title: 'Posts', href: '/posts' }]">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex items-center justify-between">
-        <h1 class="text-xl font-semibold">TextBlog</h1>
-        <Link href="/textblog/create" class="text-sm underline">Nuevo</Link>
+        <h1 class="text-xl font-semibold">Posts</h1>
+        <Link href="/posts/create" class="text-sm underline">Nuevo</Link>
       </div>
 
       <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
@@ -28,7 +28,7 @@ const handleDelete = (id: number) => {
               <div class="text-xs opacity-70" v-if="it.tags?.length">{{ it.tags.join(', ') }}</div>
             </div>
             <div class="flex items-center gap-3 text-sm">
-              <Link :href="`/textblog/${it.id}/edit`" class="underline">Editar</Link>
+              <Link :href="`/posts/${it.id}/edit`" class="underline">Editar</Link>
               <button class="text-red-600 underline" @click="handleDelete(it.id)">Eliminar</button>
             </div>
           </li>

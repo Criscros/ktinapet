@@ -41,17 +41,17 @@ const handleSave = () => {
   form.append('title', title.value);
   form.append('description', description.value || '');
   form.append('tags', tagsText.value || '');
-  router.put(`/textblog/${props.item.id}`, form, { forceFormData: true });
+  router.put(`/posts/${props.item.id}`, form, { forceFormData: true });
 };
 </script>
 
 <template>
-  <Head :title="`Admin · TextBlog · Editar #${props.item.id}`" />
-  <AppLayout :breadcrumbs="[{ title: 'TextBlog', href: '/textblog' }, { title: `Editar #${props.item.id}`, href: `/textblog/${props.item.id}/edit` }]">
+  <Head :title="`Admin · Posts · Editar #${props.item.id}`" />
+  <AppLayout :breadcrumbs="[{ title: 'Posts', href: '/posts' }, { title: `Editar #${props.item.id}`, href: `/posts/${props.item.id}/edit` }]">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 max-w-3xl">
       <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold">Editar Post (Texto)</h1>
-        <Link href="/textblog" class="text-sm underline">Volver</Link>
+        <Link href="/posts" class="text-sm underline">Volver</Link>
       </div>
 
       <div class="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">

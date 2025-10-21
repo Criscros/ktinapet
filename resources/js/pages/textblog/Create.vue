@@ -5,8 +5,8 @@ import { ref } from 'vue';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'TextBlog', href: '/textblog' },
-  { title: 'Nuevo (Texto)', href: '/textblog/create' },
+  { title: 'Posts', href: '/posts' },
+  { title: 'Nuevo (Texto)', href: '/posts/create' },
 ];
 
 const title = ref('');
@@ -86,7 +86,7 @@ const handleSubmit = () => {
   form.append('title', title.value);
   form.append('description', description.value || '');
   form.append('tags', tagsText.value || '');
-  router.post('/textblog', form, { forceFormData: true });
+  router.post('/posts', form, { forceFormData: true });
 };
 </script>
 
@@ -96,7 +96,7 @@ const handleSubmit = () => {
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex items-center justify-between">
         <h1 class="text-xl font-semibold">Nuevo Post (Texto)</h1>
-        <Link href="/textblog" class="text-sm underline">Volver</Link>
+        <Link href="/posts" class="text-sm underline">Volver</Link>
       </div>
 
       <div class="relative flex-1 rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border max-w-3xl">

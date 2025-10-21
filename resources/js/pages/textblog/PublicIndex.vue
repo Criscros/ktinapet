@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import PublicLayout from '@/layouts/PublicLayout.vue';
+
+defineOptions({ layout: PublicLayout });
 
 type Item = { id: number; title: string; description?: string; tags?: string[] };
 const props = defineProps<{ items: Array<Item> }>();
@@ -22,39 +25,63 @@ const getExcerpt = (text?: string, maxLen = 140) => {
 
 <template>
   <Head title="Blogs" />
-  <div class="mx-auto max-w-6xl p-6">
-    <header class="mb-6">
-      <h1 class="text-2xl font-semibold">Blogs</h1>
-      <p class="text-sm opacity-70">Historias, tips y noticias de grooming.</p>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <header class="mb-10 text-center">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Blogs</h1>
+      <p class="mt-2 text-base text-neutral-600 dark:text-neutral-400">Historias, tips y noticias de grooming</p>
     </header>
 
-    <div v-if="!props.items?.length" class="text-sm">No hay publicaciones aún.</div>
+    <div v-if="!props.items?.length" class="py-12 text-center text-neutral-500">No hay publicaciones aún.</div>
 
-    <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div v-else class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       <article
         v-for="it in props.items"
         :key="it.id"
-        class="group overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900"
+        class="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-neutral-900"
       >
-        <!-- Media placeholder (no image field yet) -->
-        <div class="h-32 bg-gradient-to-br from-neutral-200 to-neutral-300 dark:from-neutral-800 dark:to-neutral-700"></div>
+        <!-- Featured Image -->
+        <Link :href="`/blogs/${it.id}`" class="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-700">
+          <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30">
+            <div class="text-6xl font-bold uppercase tracking-wider text-neutral-200/40 dark:text-neutral-700/40">VIG</div>
+          </div>
+        </Link>
 
-        <div class="space-y-2 p-4">
-          <div v-if="it.tags?.length" class="flex flex-wrap gap-2 text-[11px] uppercase tracking-wide opacity-70">
-            <span v-for="t in it.tags" :key="t" class="rounded-full bg-neutral-100 px-2 py-0.5 dark:bg-neutral-800">{{ t }}</span>
+        <!-- Content -->
+        <div class="flex flex-1 flex-col p-6">
+          <!-- Tags -->
+          <div v-if="it.tags?.length" class="mb-3 flex flex-wrap gap-2">
+            <span 
+              v-for="t in it.tags" 
+              :key="t" 
+              class="text-[10px] font-medium uppercase tracking-wider text-neutral-600 dark:text-neutral-400"
+            >
+              {{ t }}
+            </span>
           </div>
 
-          <h2 class="text-base font-semibold leading-snug">
-            <Link :href="`/blogs/${it.id}`" class="group-hover:underline">{{ it.title }}</Link>
+          <!-- Title -->
+          <h2 class="mb-3 text-xl font-bold leading-tight text-neutral-900 dark:text-neutral-100">
+            <Link :href="`/blogs/${it.id}`" class="transition-colors hover:text-blue-600 dark:hover:text-blue-400">
+              {{ it.title }}
+            </Link>
           </h2>
 
-          <p class="text-sm opacity-80">{{ getExcerpt(it.description) }}</p>
+          <!-- Excerpt -->
+          <p class="mb-4 flex-1 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+            {{ getExcerpt(it.description, 120) }}
+          </p>
 
-          <div class="mt-3 flex items-center justify-between text-xs opacity-70">
-            <span>{{ getReadTime(it.description) }}</span>
-            <Link :href="`/blogs/${it.id}`" class="inline-flex items-center gap-1 font-medium group-hover:gap-2 transition-all">
+          <!-- Footer -->
+          <div class="flex items-center justify-between border-t border-neutral-100 pt-4 dark:border-neutral-800">
+            <span class="text-xs text-neutral-500 dark:text-neutral-500">{{ getReadTime(it.description) }}</span>
+            <Link 
+              :href="`/blogs/${it.id}`" 
+              class="inline-flex items-center gap-1 text-xs font-semibold text-neutral-900 transition-all hover:gap-2 dark:text-neutral-100"
+            >
               Read More
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3.5 w-3.5"><path d="M9 18l6-6-6-6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="h-3.5 w-3.5">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
             </Link>
           </div>
         </div>

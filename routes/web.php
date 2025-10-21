@@ -5,7 +5,7 @@
   use App\Http\Controllers\BookingController;
   use App\Http\Controllers\MultimediaController;
   use App\Http\Controllers\S3Controller;
-  use App\Http\Controllers\TextBlogController;
+  use App\Http\Controllers\PostController;
   use App\Models\BlogPost;
  
   Route::get('/', function () {
@@ -50,52 +50,28 @@
 
   
   // Multimedia 
+
     Route::middleware(['auth', 'verified'])
-        ->prefix('multimedia')
-        ->name('multimedia.')
-        ->group(function () {
-            Route::get('/', [MultimediaController::class, 'index'])->name('index');
-            Route::get('/create', [MultimediaController::class, 'create'])->name('create');
-            Route::post('/', [MultimediaController::class, 'store'])->name('store');
-            Route::get('/{multimedia}/edit', [MultimediaController::class, 'edit'])->name('edit');
-            Route::put('/{multimedia}', [MultimediaController::class, 'update'])->name('update');
-            Route::delete('/{multimedia}', [MultimediaController::class, 'destroy'])->name('destroy');
-        });
+        ->resource('multimedia', MultimediaController::class)
+        ->names('multimedia');
 
-  // Text blog create (TinyMCE)
-  Route::get('textblog/create', [TextBlogController::class, 'create'])
-      ->middleware(['auth', 'verified'])
-      ->name('textblog.create');
 
-  // Text blog admin CRUD
-  Route::get('textblog', [TextBlogController::class, 'index'])
-      ->middleware(['auth', 'verified'])
-      ->name('textblog.index');
-  Route::post('textblog', [TextBlogController::class, 'store'])
-      ->middleware(['auth', 'verified'])
-      ->name('textblog.store');
-  Route::get('textblog/{textblog}/edit', [TextBlogController::class, 'edit'])
-      ->middleware(['auth', 'verified'])
-      ->name('textblog.edit');
-  Route::put('textblog/{textblog}', [TextBlogController::class, 'update'])
-      ->middleware(['auth', 'verified'])
-      ->name('textblog.update');
-  Route::delete('textblog/{textblog}', [TextBlogController::class, 'destroy'])
-      ->middleware(['auth', 'verified'])
-      ->name('textblog.destroy');
+    Route::middleware(['auth', 'verified'])
+        ->resource('posts', PostController::class)
+        ->names('posts');
 
-  // Public list (typo requested: /bologs)
-  Route::get('bologs', [TextBlogController::class, 'publicIndex'])
-      ->name('textblog.public');
+
+
+
   // Public list alias: /blogs
-  Route::get('blogs', [TextBlogController::class, 'publicIndex'])
-      ->name('textblog.public.alias');
+  Route::get('blogs', [PostController::class, 'publicIndex'])
+      ->name('posts.public.alias');
 
   // Public show routes
-  Route::get('blogs/{textblog}', [TextBlogController::class, 'show'])
-      ->name('textblog.show');
-  Route::get('bologs/{textblog}', [TextBlogController::class, 'show'])
-      ->name('textblog.show.alias');
+  Route::get('blogs/{post}', [PostController::class, 'show'])
+      ->name('posts.show');
+  Route::get('bologs/{post}', [PostController::class, 'show'])
+      ->name('posts.show.alias');
 
   // S3 presign (videos only)
   Route::get('/s3/presign', [S3Controller::class, 'presign'])
