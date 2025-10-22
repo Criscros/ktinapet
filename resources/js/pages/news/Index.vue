@@ -328,7 +328,7 @@ video {
 
 /* Responsive tweaks */
 @media (min-width:900px){
-  .short{max-width:420px;margin:0 auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+  .short{max-width:600px;margin:0 auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
   .meta{right:120px}
   .actions{right:22px}
 }

@@ -56,9 +56,10 @@
         ->names('multimedia');
 
 
-    Route::middleware(['auth', 'verified'])
-        ->resource('posts', PostController::class)
-        ->names('posts');
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::resource('posts', PostController::class)->names('posts');
+        Route::get('admin/blogs', [PostController::class, 'index'])->name('posts.admin');
+    });
 
 
 
