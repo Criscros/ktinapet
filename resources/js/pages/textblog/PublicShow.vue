@@ -15,11 +15,11 @@ type Item = {
 const props = defineProps<{ item: Item }>();
 
 // Try to use TinyMCE content CSS from the CDN for consistent rendering
-const tinyMceApiKey =
-  import.meta.env.VITE_TINYMCE_API_KEY ||
-  (document.querySelector('meta[name="tinymce-api-key"]') as HTMLMetaElement | null)?.content ||
-  '';
-const tinyContentCssHref = `https://cdn.tiny.cloud/1/${tinyMceApiKey || 'no-api-key'}/tinymce/8/skins/content/default/content.min.css`;
+// const tinyMceApiKey =
+//   import.meta.env.VITE_TINYMCE_API_KEY ||
+//   (document.querySelector('meta[name="tinymce-api-key"]') as HTMLMetaElement | null)?.content ||
+//   '';
+// const tinyContentCssHref = `https://cdn.tiny.cloud/1/${tinyMceApiKey || 'no-api-key'}/tinymce/8/skins/content/default/content.min.css`;
 
 const formatDate = (iso?: string) => {
   if (!iso) return '';
@@ -34,9 +34,9 @@ const formatDate = (iso?: string) => {
 </script>
 
 <template>
-  <Head :title="props.item.title || 'Blog'">
+  <!-- <Head :title="props.item.title || 'Blog'">
     <link rel="stylesheet" :href="tinyContentCssHref" />
-  </Head>
+  </Head> -->
 
   <div class="min-h-screen bg-white dark:bg-neutral-900">
     <!-- Featured Image Section - Full Width -->
