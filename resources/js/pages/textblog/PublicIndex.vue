@@ -24,10 +24,10 @@ const getExcerpt = (text?: string, maxLen = 140) => {
 </script>
 
 <template>
-  <Head title="Blogs" />
+  <Head title="Blogs"   cllas/>
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <header class="mb-10 text-center">
-      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Blogs</h1>
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl text-neutral-900 dark:text-neutral-100">Blogs</h1>
       <p class="mt-2 text-base text-neutral-600 dark:text-neutral-400">Historias, tips y noticias de grooming</p>
     </header>
 

@@ -34,7 +34,30 @@
   Route::get('bookings', [BookingController::class, 'index'])
       ->middleware(['auth', 'verified'])
       ->name('bookings');
- 
+
+  Route::get('customer/{customer}/pets', function (\App\Models\Customer $customer) {
+      $pets = $customer->pets()->get()->map(function ($pet) {
+          return [
+              'id' => $pet->id,
+              'name' => $pet->name,
+              'type' => $pet->type,
+              'breed' => $pet->breed,
+              'weight' => $pet->weight,
+              'coat' => $pet->coat,
+              'created_at' => optional($pet->created_at)->format('Y-m-d H:i'),
+          ];
+      });
+
+      return \Inertia\Inertia::render('CustomerPets', [
+          'customer' => [
+              'id' => $customer->id,
+              'phone' => $customer->phone,
+              'address' => $customer->address,
+          ],
+          'pets' => $pets,
+      ]);
+  })->middleware(['auth', 'verified'])->name('customer.pets');
+
   Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])
       ->middleware(['auth', 'verified'])
       ->name('bookings.status');

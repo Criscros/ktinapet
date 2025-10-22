@@ -9,6 +9,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type Services = Record<string, boolean> | null | undefined;
+type Pet = {
+  id: number;
+  name: string;
+  type: string;
+  breed: string;
+};
 type BookingRow = {
   id: number;
   date: string | null;
@@ -16,6 +22,8 @@ type BookingRow = {
   services: Services;
   customer_phone: string | null;
   customer_address: string | null;
+  customer_id: number;
+  pets: Pet[];
   status: boolean;
   created_at: string | null;
 };
@@ -96,6 +104,7 @@ const handleSaveNotes = async () => {
     router.reload({ only: ['bookings'] });
   } catch {}
 };
+
 </script>
 
 <template>
@@ -118,14 +127,16 @@ const handleSaveNotes = async () => {
             <thead>
               <tr class="text-left text-neutral-600 dark:text-neutral-300 border-b border-sidebar-border/70">
                 <th class="py-2 pr-4">#</th>
-               
+                
    
                 <th class="py-2 pr-4">Phone</th>
                 <th class="py-2 pr-4">Address</th>
+                <th class="py-2 pr-4">Created</th>
                 <th class="py-2 pr-4">Services</th>
                 <th class="py-2 pr-4">Notes</th>
                 <th class="py-2 pr-4">Status</th>
-                <th class="py-2 pr-4">Created</th>
+
+                <th class="py-2 pr-4">pets</th>
               </tr>
             </thead>
             <tbody>
@@ -134,6 +145,7 @@ const handleSaveNotes = async () => {
      
                 <td class="py-2 pr-4">{{ row.customer_phone  }}</td>
                 <td class="py-2 pr-4">{{ row.customer_address }}</td>
+                <td class="py-2 pr-4 whitespace-nowrap">{{ row.created_at || '-' }}</td>
                 <td class="py-2 pr-4">{{ formatServices(row.services) }}</td>
                 <td class="py-2 pr-4 max-w-[24rem] truncate" :title="row.notes || ''">
       
@@ -178,7 +190,22 @@ const handleSaveNotes = async () => {
                     dark:peer-checked:bg-green-600"></div>
                 </label>
                 </td>
-                <td class="py-2 pr-4 whitespace-nowrap">{{ row.created_at || '-' }}</td>
+                <td class="py-2 pr-4">
+                  <div v-if="row.pets && row.pets.length" class="flex items-center gap-2">
+          
+                    <Link
+                      :href="`/customer/${row.customer_id}/pets`"
+                      class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
+                    >
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      </svg>
+                 
+                    </Link>
+                  </div>
+                  <span v-else class="text-xs text-neutral-400">No pets</span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -215,6 +242,7 @@ const handleSaveNotes = async () => {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

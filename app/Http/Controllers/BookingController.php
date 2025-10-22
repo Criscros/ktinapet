@@ -19,7 +19,7 @@ class BookingController extends Controller
      */
     public function index(): Response
     {
-        $bookings = Booking::with('customer')
+        $bookings = Booking::with(['customer', 'customer.pets'])
             ->latest('created_at')
             ->paginate(10)
             ->through(function ($b) {
@@ -30,15 +30,43 @@ class BookingController extends Controller
                     'services' => $b->services,
                     'customer_phone' => optional($b->customer)->phone,
                     'customer_address' => optional($b->customer)->address,
+                    'customer_id' => $b->customer_id,
+                    'pets' => optional($b->customer)->pets->map(fn($pet) => [
+                        'id' => $pet->id,
+                        'name' => $pet->name,
+                        'type' => $pet->type,
+                        'breed' => $pet->breed,
+                    ]) ?? [],
                     'status' => (bool) $b->status,
                     'created_at' => optional($b->created_at)->format('Y-m-d H:i'),
                 ];
             });
     
-        
+        $customers = Customer::select('id', 'phone', 'address')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $pets = Pet::with('customer:id,phone')
+            ->select('id', 'customer_id', 'type', 'breed', 'name', 'weight', 'coat')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($pet) {
+                return [
+                    'id' => $pet->id,
+                    'customer_id' => $pet->customer_id,
+                    'customer_phone' => optional($pet->customer)->phone,
+                    'type' => $pet->type,
+                    'breed' => $pet->breed,
+                    'name' => $pet->name,
+                    'weight' => $pet->weight,
+                    'coat' => $pet->coat,
+                ];
+            });
 
         return Inertia::render('Bookings', [
             'bookings' => $bookings,
+            'customers' => $customers,
+            'pets' => $pets,
         ]);
     }
 
@@ -52,12 +80,13 @@ class BookingController extends Controller
         $phone = data_get($payload, 'personal.phone')
             ?? data_get($payload, 'owner.phone')
             ?? $request->string('phone')->toString();
+        $address = data_get($payload, 'address.city').', '.data_get($payload, 'address.street');
 
   
 
-        $result = DB::transaction(function () use ($payload, $phone) {
+        $result = DB::transaction(function () use ($payload, $phone, $address) {
             // 1) Customer by phone
-            $customer = Customer::firstOrCreate(['phone' => $phone], ['phone' => $phone]);
+            $customer = Customer::firstOrCreate(['phone' => $phone], ['phone' => $phone, 'address' => $address]);
 
             // 2) Upsert Pet for this customer
             $petType = data_get($payload, 'pet.type');
