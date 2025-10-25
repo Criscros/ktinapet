@@ -203,7 +203,7 @@ const handleClose = () => {
         >
           <div
             v-if="isOpen"
-            class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white dark:bg-neutral-900 shadow-2xl"
+            class="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white dark:bg-neutral-900 shadow-2xl"
           >
             <!-- Close button -->
             <button
@@ -216,7 +216,7 @@ const handleClose = () => {
               </svg>
             </button>
 
-            <div class="grid gap-8 lg:grid-cols-2 p-6 lg:p-8">
+            <div class="grid gap-10 lg:grid-cols-2 p-8 lg:p-10">
               <!-- Left: CTA -->
               <div class="text-center lg:text-left flex flex-col justify-center">
                 <span class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 mb-4">Clean, Fluffy, Fabulous Pets</span>
@@ -224,14 +224,14 @@ const handleClose = () => {
                   <span class="block">Grooming Day? Make</span>
                   <span class="block">It Their <span class="text-pink-600">FAVORITE TIME</span> ⚡</span>
                 </h2>
-                <div class="rounded-2xl bg-rose-50 dark:bg-rose-900/20 p-8 flex items-center justify-center">
-                  <img src="/logo_black.jpeg" alt="KTINA Pet Grooming" class="max-h-40 object-contain" />
+                <div class="rounded-2xl bg-rose-50 dark:bg-rose-900/20 p-10 flex items-center justify-center">
+                  <img src="/logo_black.jpeg" alt="KTINA Pet Grooming" class="max-h-48 object-contain" />
                 </div>
               </div>
 
               <!-- Right: Booking Form -->
               <div class="w-full flex justify-center">
-                <div v-if="!isSuccess" class="w-full rounded-2xl bg-neutral-50 dark:bg-neutral-800 p-6">
+                <div v-if="!isSuccess" class="w-full rounded-2xl bg-neutral-50 dark:bg-neutral-800 p-8">
                   <div class="mb-4 flex items-center justify-between">
                     <div class="flex items-center gap-3">
                       <img src="/icon.webp" alt="Brand" class="h-10 w-10 rounded-md object-cover" />
