@@ -31,6 +31,8 @@ const formatDate = (iso?: string) => {
     return iso;
   }
 };
+
+
 </script>
 
 <template>
@@ -116,3 +118,9 @@ const formatDate = (iso?: string) => {
     </div>
   </div>
 </template>
+
+
+<style scoped>
+
+
+</style>
