@@ -5,7 +5,7 @@ import { ref } from 'vue';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Bookings' },
+  { title: 'Reservas', href: '/bookings' },
 ];
 
 type Services = Record<string, boolean> | null | undefined;
@@ -108,17 +108,17 @@ const handleSaveNotes = async () => {
 </script>
 
 <template>
-  <Head title="Bookings" />
+  <Head title="Reservas" />
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex items-center justify-between">
-        <h1 class="text-xl font-semibold">Bookings</h1>
-        <div class="text-sm text-neutral-500">Manage customer bookings</div>
+        <h1 class="text-xl font-semibold">Reservas</h1>
+        <div class="text-sm text-neutral-500">Gestionar reservas de clientes</div>
       </div>
 
       <div class="relative flex-1 rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
         <div v-if="!props.bookings?.data?.length" class="text-sm text-neutral-500 dark:text-neutral-300">
-          No bookings yet.
+          No hay reservas aún.
         </div>
 
         <div v-else class="flex h-full flex-col">
@@ -127,22 +127,18 @@ const handleSaveNotes = async () => {
             <thead>
               <tr class="text-left text-neutral-600 dark:text-neutral-300 border-b border-sidebar-border/70">
                 <th class="py-2 pr-4">#</th>
-                
-   
-                <th class="py-2 pr-4">Phone</th>
-                <th class="py-2 pr-4">Address</th>
-                <th class="py-2 pr-4">Created</th>
-                <th class="py-2 pr-4">Services</th>
-                <th class="py-2 pr-4">Notes</th>
-                <th class="py-2 pr-4">Status</th>
-
-                <th class="py-2 pr-4">pets</th>
+                <th class="py-2 pr-4">Teléfono</th>
+                <th class="py-2 pr-4">Dirección</th>
+                <th class="py-2 pr-4">Creada</th>
+                <th class="py-2 pr-4">Servicios</th>
+                <th class="py-2 pr-4">Notas</th>
+                <th class="py-2 pr-4">Estado</th>
+                <th class="py-2 pr-4">Mascotas</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="row in props.bookings.data" :key="row.id" class="border-b border-sidebar-border/40">
                 <td class="py-2 pr-4">{{ row.id }}</td>
-     
                 <td class="py-2 pr-4">{{ row.customer_phone  }}</td>
                 <td class="py-2 pr-4">{{ row.customer_address }}</td>
                 <td class="py-2 pr-4 whitespace-nowrap">{{ row.created_at || '-' }}</td>
@@ -204,7 +200,7 @@ const handleSaveNotes = async () => {
                  
                     </Link>
                   </div>
-                  <span v-else class="text-xs text-neutral-400">No pets</span>
+                  <span v-else class="text-xs text-neutral-400">Sin mascotas</span>
                 </td>
               </tr>
             </tbody>

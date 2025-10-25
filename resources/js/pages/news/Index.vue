@@ -23,24 +23,24 @@
         </div>
       </div>
 
-      <div class="muted-chip" v-show="mutedStates[index]">Muted</div>
+      <div class="muted-chip" v-show="mutedStates[index]">Silenciado</div>
 
       <div class="actions">
-        <div class="action-btn" @click.stop="like(index)" title="Like">
+        <div class="action-btn" @click.stop="like(index)" title="Me gusta">
           <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 21s-7.5-4.5-9.5-8.5C.9 7.9 4.5 3 8.5 3 10.6 3 12 4.1 12 4.1S13.4 3 15.5 3C19.5 3 23.1 7.9 21.5 12.5 19.5 16.5 12 21 12 21z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
-          <div class="action-label">Like</div>
+          <div class="action-label">Me gusta</div>
         </div>
 
-        <div class="action-btn" title="Comment">
+        <div class="action-btn" title="Comentar">
           <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
           <div class="action-label">0</div>
         </div>
 
-        <div class="action-btn" :title="mutedStates[index] ? 'Unmute' : 'Mute'" @click.stop="toggleMute(index)">
+        <div class="action-btn" :title="mutedStates[index] ? 'Activar sonido' : 'Silenciar'" @click.stop="toggleMute(index)">
           <svg v-if="mutedStates[index]" class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M5 9v6h4l5 4V5l-5 4H5z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M16 8l5 5M21 8l-5 5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
@@ -50,18 +50,18 @@
             <path d="M19 12c0-2.8-2.2-5-5-5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
             <path d="M21 12c0-4-3-7-7-7" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
-          <div class="action-label">{{ mutedStates[index] ? 'Unmute' : 'Mute' }}</div>
+          <div class="action-label">{{ mutedStates[index] ? 'Activar sonido' : 'Silenciar' }}</div>
         </div>
 
-        <div class="action-btn" title="Share">
+        <div class="action-btn" title="Compartir">
           <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
             <path d="M8 7l4-4 4 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
-          <div class="action-label">Share</div>
+          <div class="action-label">Compartir</div>
         </div>
 
-        <div class="action-btn avatar" title="Channel">
+        <div class="action-btn avatar" title="Canal">
           <img src="/logo.jpeg" alt="avatar" />
         </div>
       </div>
@@ -80,7 +80,7 @@
             <img src="/logo.jpeg" alt="channel" />
           </div>
           <div>
-            <div class="name">News <span class="subscribe">SUBSCRIBE</span></div>
+            <div class="name">Noticias <span class="subscribe">SUSCRIBIRSE</span></div>
             <div style="font-size:13px;color:#ccc">@ktinapet</div>
           </div>
         </div>
@@ -88,13 +88,13 @@
         <div class="title">{{ post.title }}</div>
         <div class="song" style="margin-top:8px" @click.stop="toggleMute(index)">
           <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><rect width='100%' height='100%' fill='%2300aaff'/></svg>" alt="song">
-          <div>{{ post.tags?.length ? post.tags.join(' • ') : 'Original audio' }}</div>
+          <div>{{ post.tags?.length ? post.tags.join(' • ') : 'Audio original' }}</div>
         </div>
       </div>
     </div>
 
     <div v-if="!posts?.length" class="short empty">
-      <div style="color:#fff;opacity:.9;font-size:14px;">No posts yet.</div>
+      <div style="color:#fff;opacity:.9;font-size:14px;">Aún no hay publicaciones.</div>
     </div>
   </div>
 </template>

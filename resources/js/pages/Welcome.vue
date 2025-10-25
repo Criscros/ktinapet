@@ -21,7 +21,7 @@ const closeBookingModal = () => {
 </script>
 
   <template>
-    <Head title="Welcome - KTINA Grooming">
+    <Head title="Bienvenido - KTINA Grooming">
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <link rel="icon" type="image/x-icon" href="/favico.ico" />
@@ -84,7 +84,7 @@ const closeBookingModal = () => {
     <section class="bg-neutral-900 py-16">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div class="mb-12 text-center">
-          <h2 class="mb-4 text-3xl font-bold text-white">
+          <h2 class="mb-4 text-2xl font-bold text-white">
             Desde tratamientos básicos hasta experiencias de spa, nos aseguramos de que tu mascota reciba el mejor cuidado, en un entorno tranquilo, familiar y libre de estrés.
           </h2>
           <p class="text-sm text-neutral-400">
@@ -130,7 +130,7 @@ const closeBookingModal = () => {
             <div class="mb-4 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-lime-900/50 p-1">
               <img src="/logos/patas.jpeg" alt="Spa treatments" class="h-full w-full rounded-full object-cover" />
             </div>
-            <p class="text-sm font-medium text-white">Spa treatments</p>
+            <p class="text-sm font-medium text-white">Tratamientos de spa</p>
           </div>
         </div>
       </div>

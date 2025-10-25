@@ -32,14 +32,14 @@ import PublicFooter from '@/components/PublicFooter.vue'
 
           <!-- Navigation (desktop) -->
           <nav class="hidden lg:flex items-center gap-6 text-base">
-            <Link href="/news" class="text-[#1b1b18]/80 hover:text-[#1b1b18] dark:text-[#EDEDEC]/80 dark:hover:text-[#EDEDEC]">News</Link>
+            <Link href="/news" class="text-[#1b1b18]/80 hover:text-[#1b1b18] dark:text-[#EDEDEC]/80 dark:hover:text-[#EDEDEC]">Noticias</Link>
             <Link href="/blogs" class="text-[#1b1b18]/80 hover:text-[#1b1b18] dark:text-[#EDEDEC]/80 dark:hover:text-[#EDEDEC]">Blog</Link>
             <Link href="/servicios" class="text-[#1b1b18]/80 hover:text-[#1b1b18] dark:text-[#EDEDEC]/80 dark:hover:text-[#EDEDEC]">Servicios</Link>
           </nav>
 
           <!-- Booking Button -->
           <Link href="/#booking" class="inline-flex items-center rounded-full bg-pink-600 px-5 py-2 font-semibold text-white hover:bg-pink-700 text-sm">
-            Booking
+            Reservar
           </Link>
         </div>
       </div>

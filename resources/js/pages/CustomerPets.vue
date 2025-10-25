@@ -25,13 +25,13 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Bookings', href: '/bookings' },
-  { title: 'Customer Pets', href: '#' },
+  { title: 'Reservas', href: '/bookings' },
+  { title: 'Mascotas del cliente', href: '#' },
 ];
 </script>
 
 <template>
-  <Head title="Customer Pets" />
+  <Head title="Mascotas del cliente" />
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
       <!-- Customer Info Header -->
@@ -43,7 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             </svg>
           </div>
           <div class="flex-1">
-            <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Customer Pets</h1>
+            <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Mascotas del cliente</h1>
             <div class="mt-1 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400">
               <div class="flex items-center gap-2">
                 <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +63,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             href="/bookings"
             class="rounded-lg px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 transition-colors"
           >
-            Back to Bookings
+            Volver a Reservas
           </Link>
         </div>
       </div>
@@ -92,22 +92,22 @@ const breadcrumbs: BreadcrumbItem[] = [
           <!-- Pet Details -->
           <div class="space-y-3">
             <div class="flex items-center justify-between py-2 border-b border-sidebar-border/40">
-              <span class="text-sm text-neutral-600 dark:text-neutral-400">Breed</span>
+              <span class="text-sm text-neutral-600 dark:text-neutral-400">Raza</span>
               <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ pet.breed }}</span>
             </div>
 
             <div v-if="pet.weight" class="flex items-center justify-between py-2 border-b border-sidebar-border/40">
-              <span class="text-sm text-neutral-600 dark:text-neutral-400">Weight</span>
+              <span class="text-sm text-neutral-600 dark:text-neutral-400">Peso</span>
               <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ pet.weight }}</span>
             </div>
 
             <div v-if="pet.coat" class="flex items-center justify-between py-2 border-b border-sidebar-border/40">
-              <span class="text-sm text-neutral-600 dark:text-neutral-400">Coat Type</span>
+              <span class="text-sm text-neutral-600 dark:text-neutral-400">Tipo de pelaje</span>
               <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ pet.coat }}</span>
             </div>
 
             <div v-if="pet.created_at" class="flex items-center justify-between py-2">
-              <span class="text-sm text-neutral-600 dark:text-neutral-400">Added</span>
+              <span class="text-sm text-neutral-600 dark:text-neutral-400">Agregada</span>
               <span class="text-xs text-neutral-500 dark:text-neutral-400">{{ pet.created_at }}</span>
             </div>
           </div>
@@ -118,8 +118,8 @@ const breadcrumbs: BreadcrumbItem[] = [
           <svg class="mx-auto h-12 w-12 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
           </svg>
-          <h3 class="mt-4 text-lg font-medium text-neutral-900 dark:text-neutral-100">No pets found</h3>
-          <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">This customer doesn't have any pets registered yet.</p>
+          <h3 class="mt-4 text-lg font-medium text-neutral-900 dark:text-neutral-100">No se encontraron mascotas</h3>
+          <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">Este cliente aún no tiene mascotas registradas.</p>
         </div>
       </div>
     </div>

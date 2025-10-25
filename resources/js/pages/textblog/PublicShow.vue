@@ -53,7 +53,7 @@ const formatDate = (iso?: string) => {
             <img src="/logo_black.jpeg" alt="KTINA" class="h-16 w-auto" />
             <div class="text-left">
               <div class="text-2xl font-bold text-neutral-900 dark:text-white">Blog</div>
-              <div class="text-sm font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">Spotlight</div>
+              <div class="text-sm font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">Destacado</div>
             </div>
           </div>
           
@@ -75,7 +75,7 @@ const formatDate = (iso?: string) => {
     <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <!-- Breadcrumb -->
       <nav class="mb-8 text-sm text-neutral-500 dark:text-neutral-400">
-        <Link href="/blogs" class="hover:text-neutral-900 dark:hover:text-neutral-200">← Back to all posts</Link>
+        <Link href="/blogs" class="hover:text-neutral-900 dark:hover:text-neutral-200">← Volver a todas las publicaciones</Link>
       </nav>
 
       <!-- Article -->
