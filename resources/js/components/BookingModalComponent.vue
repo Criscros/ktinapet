@@ -12,10 +12,10 @@ const emit = defineEmits<{
 // Stepper state
 const stepIndex = ref(0);
 const steps = [
-    'Phone number',
-    'Address',
-    'Add pet',
-    'Services',
+    'Número de teléfono',
+    'Dirección',
+    'Agregar mascota',
+    'Servicios',
 ];
 
 // Submit state
@@ -57,7 +57,7 @@ const catBreeds = [
     'Bengal',
 ];
 const availableBreeds = computed(() => (form.pet.type === 'Cat' ? catBreeds : dogBreeds));
-const coatTypes = ['Short', 'Medium', 'Long', 'Curly', 'Wire', 'Hairless', 'Double Coat'];
+const coatTypes = ['Corto', 'Medio', 'Largo', 'Rizado', 'Duro', 'Sin pelo', 'Doble capa'];
 
 // Breed searchable combobox state
 const search = ref('');
@@ -219,10 +219,10 @@ const handleClose = () => {
             <div class="grid gap-10 lg:grid-cols-2 p-8 lg:p-10">
               <!-- Left: CTA -->
               <div class="text-center lg:text-left flex flex-col justify-center">
-                <span class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 mb-4">Clean, Fluffy, Fabulous Pets</span>
+                <span class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 mb-4">Limpias, Esponjosas y Fabulosas</span>
                 <h2 class="text-3xl font-bold leading-tight text-neutral-900 dark:text-neutral-100 lg:text-4xl mb-4">
-                  <span class="block">Grooming Day? Make</span>
-                  <span class="block">It Their <span class="text-pink-600">FAVORITE TIME</span> ⚡</span>
+                  <span class="block">¿Día de grooming? Haz</span>
+                  <span class="block">que sea su <span class="text-pink-600">MOMENTO FAVORITO</span> ⚡</span>
                 </h2>
                 <div class="rounded-2xl bg-rose-50 dark:bg-rose-900/20 p-10 flex items-center justify-center">
                   <img src="/logo_black.jpeg" alt="KTINA Pet Grooming" class="max-h-48 object-contain" />
@@ -237,12 +237,12 @@ const handleClose = () => {
                       <img src="/icon.webp" alt="Brand" class="h-10 w-10 rounded-md object-cover" />
                       <div class="text-xs text-neutral-600 dark:text-neutral-300">[MPGPRO] Broward, Boca & Delray</div>
                     </div>
-                    <div class="text-xs text-neutral-500">Step {{ stepIndex + 1 }} / {{ steps.length }}</div>
+                    <div class="text-xs text-neutral-500">Paso {{ stepIndex + 1 }} / {{ steps.length }}</div>
                   </div>
 
                   <h2 class="text-2xl font-semibold mb-1 dark:text-neutral-300">{{ currentStepLabel }}</h2>
                   <p class="text-sm text-neutral-600 dark:text-neutral-300 mb-6">
-                    Please fill out the information below to continue your booking.
+                    Por favor completa la información para continuar con tu reserva.
                   </p>
 
                   <!-- Steps -->
@@ -250,7 +250,7 @@ const handleClose = () => {
                     <!-- Step 1: Phone only -->
                     <div v-if="stepIndex === 0" class="grid gap-4">
                       <div>
-                        <label class="block text-sm mb-1 dark:text-neutral-300">Phone number*</label>
+                        <label class="block text-sm mb-1 dark:text-neutral-300">Número de teléfono*</label>
                         
                         <div class="flex items-center rounded-md border border-neutral-300 bg-white px-2 focus-within:ring-2 focus-within:ring-pink-500 dark:border-neutral-700 dark:bg-neutral-700">
                           <span class="px-2 text-sm text-neutral-500 dark:text-neutral-400">+57</span>
@@ -264,7 +264,7 @@ const handleClose = () => {
                         </div>
 
                         <p class="mt-2 text-[11px] text-neutral-500 dark:text-neutral-400">
-                          We'll use this to confirm and send appointment updates.
+                          Usaremos este número para confirmar y enviar actualizaciones de tu cita.
                         </p>
                       </div>
                     </div>
@@ -272,11 +272,11 @@ const handleClose = () => {
                     <!-- Step 2: Address -->
                     <div v-else-if="stepIndex === 1" class="grid gap-4">
                       <div>
-                        <label class="block text-sm mb-1 dark:text-neutral-300">City*</label>
+                        <label class="block text-sm mb-1 dark:text-neutral-300">Ciudad*</label>
                         <input v-model="form.address.city" type="text" class="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-100" />
                       </div>
                       <div>
-                        <label class="block text-sm mb-1 dark:text-neutral-300">Street*</label>
+                        <label class="block text-sm mb-1 dark:text-neutral-300">Calle*</label>
                         <input v-model="form.address.street" type="text" class="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-100" />
                       </div>
                     </div>
@@ -284,11 +284,11 @@ const handleClose = () => {
                     <!-- Step 3: Add pet -->
                     <div v-else-if="stepIndex === 2" class="grid gap-4">
                       <div class="flex items-center gap-2">
-                        <button type="button" @click="form.pet.type = 'Dog'" :class="['px-3 py-1.5 rounded-full text-sm', form.pet.type==='Dog' ? 'bg-pink-600 text-white' : 'bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-100']">Dog</button>
-                        <button type="button" @click="form.pet.type = 'Cat'" :class="['px-3 py-1.5 rounded-full text-sm', form.pet.type==='Cat' ? 'bg-pink-600 text-white' : 'bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-100']">Cat</button>
+                        <button type="button" @click="form.pet.type = 'Dog'" :class="['px-3 py-1.5 rounded-full text-sm', form.pet.type==='Dog' ? 'bg-pink-600 text-white' : 'bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-100']">Perro</button>
+                        <button type="button" @click="form.pet.type = 'Cat'" :class="['px-3 py-1.5 rounded-full text-sm', form.pet.type==='Cat' ? 'bg-pink-600 text-white' : 'bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-100']">Gato</button>
                       </div>
                       <div>
-                        <label class="block text-sm mb-1 dark:text-neutral-300">Breed*</label>
+                        <label class="block text-sm mb-1 dark:text-neutral-300">Raza*</label>
                         <div
                           class="relative"
                           @keydown.down.prevent="highlightNext"
@@ -300,7 +300,7 @@ const handleClose = () => {
                             v-model="search"
                             type="search"
                             inputmode="search"
-                            placeholder="Search breed..."
+                            placeholder="Buscar raza..."
                             @focus="openList"
                             @blur="onBlur"
                             aria-autocomplete="list"
@@ -334,21 +334,21 @@ const handleClose = () => {
                         </div>
                       </div>
                       <div>
-                        <label class="block text-sm mb-1 dark:text-neutral-300">Name*</label>
+                        <label class="block text-sm mb-1 dark:text-neutral-300">Nombre*</label>
                         <input v-model="form.pet.name" type="text" class="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-100" />
                       </div>
                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label class="block text-sm mb-1 dark:text-neutral-300">Weight</label>
+                          <label class="block text-sm mb-1 dark:text-neutral-300">Peso</label>
                           <input v-model="form.pet.weight" type="text" class="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-100" />
                         </div>
                         <div>
-                          <label class="block text-sm mb-1 dark:text-neutral-300">Coat type</label>
+                          <label class="block text-sm mb-1 dark:text-neutral-300">Tipo de pelaje</label>
                           <select
                             v-model="form.pet.coat"
                             class="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-100"
                           >
-                            <option disabled value="">Select coat type</option>
+                            <option disabled value="">Selecciona el tipo de pelaje</option>
                             <option v-for="c in coatTypes" :key="c" :value="c">{{ c }}</option>
                           </select>
                         </div>
@@ -357,29 +357,37 @@ const handleClose = () => {
 
                     <!-- Step 4: Services -->
                     <div v-else-if="stepIndex === 3" class="grid gap-3">
-                      <label class="flex items-center gap-2 text-sm dark:text-neutral-300">
-                        <input type="checkbox" v-model="form.services.bath" class="rounded" /> Bath
+                      <label class="group flex items-center gap-4 rounded-lg p-3 text-base dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition-colors">
+                        <input type="checkbox" v-model="form.services.bath" 
+                          class="h-6 w-6 rounded border-neutral-300 text-pink-600 accent-pink-600 focus:ring-2 focus:ring-pink-500 dark:border-neutral-600 dark:bg-neutral-700" />
+                        <span>Baño</span>
                       </label>
-                      <label class="flex items-center gap-2 text-sm dark:text-neutral-300">
-                        <input type="checkbox" v-model="form.services.groom" class="rounded" /> Groom
+                      <label class="group flex items-center gap-4 rounded-lg p-3 text-base dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition-colors">
+                        <input type="checkbox" v-model="form.services.groom" 
+                          class="h-6 w-6 rounded border-neutral-300 text-pink-600 accent-pink-600 focus:ring-2 focus:ring-pink-500 dark:border-neutral-600 dark:bg-neutral-700" />
+                        <span>Corte y peinado</span>
                       </label>
-                      <label class="flex items-center gap-2 text-sm dark:text-neutral-300">
-                        <input type="checkbox" v-model="form.services.nails" class="rounded" /> Nails
+                      <label class="group flex items-center gap-4 rounded-lg p-3 text-base dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition-colors">
+                        <input type="checkbox" v-model="form.services.nails" 
+                          class="h-6 w-6 rounded border-neutral-300 text-pink-600 accent-pink-600 focus:ring-2 focus:ring-pink-500 dark:border-neutral-600 dark:bg-neutral-700" />
+                        <span>Uñas</span>
                       </label>
-                      <label class="flex items-center gap-2 text-sm dark:text-neutral-300">
-                        <input type="checkbox" v-model="form.services.earCleaning" class="rounded" /> Ear cleaning
+                      <label class="group flex items-center gap-4 rounded-lg p-3 text-base dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition-colors">
+                        <input type="checkbox" v-model="form.services.earCleaning" 
+                          class="h-6 w-6 rounded border-neutral-300 text-pink-600 accent-pink-600 focus:ring-2 focus:ring-pink-500 dark:border-neutral-600 dark:bg-neutral-700" />
+                        <span>Limpieza de oídos</span>
                       </label>
-                      <p class="text-[11px] text-neutral-500 mt-1 dark:text-neutral-400">Choose at least one service.</p>
+                      <p class="text-[11px] text-neutral-500 mt-1 dark:text-neutral-400">Elige al menos un servicio.</p>
                     </div>
                   </div>
 
                   <!-- Nav buttons -->
                   <div class="mt-6 flex items-center justify-between gap-3">
                     <button type="button" @click="handleBack" :disabled="stepIndex===0" class="rounded-full px-4 py-2 text-sm border border-neutral-300 text-neutral-700 disabled:opacity-50 dark:border-neutral-600 dark:text-neutral-200">
-                      Back
+                      Atrás
                     </button>
                     <button v-if="!isLastStep" type="button" @click="handleNext" class="rounded-full bg-pink-600 px-5 py-2.5 text-white text-sm font-medium hover:bg-pink-700">
-                      Next
+                      Siguiente
                     </button>
                     <button v-else type="button" @click="handleBookingSubmit" :disabled="isSubmitting" class="rounded-full bg-pink-600 px-5 py-2.5 text-white text-sm font-medium hover:bg-pink-700 disabled:opacity-60 disabled:cursor-not-allowed">
                       <span v-if="isSubmitting" class="inline-flex items-center gap-2">
@@ -387,18 +395,18 @@ const handleClose = () => {
                           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                         </svg>
-                        Sending...
+                        Enviando...
                       </span>
-                      <span v-else>Send booking</span>
+                      <span v-else>Enviar reserva</span>
                     </button>
                   </div>
                 </div>
                 <div v-else class="w-full rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-black/10 dark:bg-neutral-800">
                   <img src="/icon.webp" alt="Brand" class="mx-auto mb-4 h-12 w-12 rounded-md object-cover" />
-                  <h2 class="text-xl font-semibold mb-2 dark:text-neutral-100">Your booking was created</h2>
-                  <p class="text-sm text-neutral-600 dark:text-neutral-300 mb-4">Soon our team contact you. Thank you.</p>
+                  <h2 class="text-xl font-semibold mb-2 dark:text-neutral-100">Tu reserva fue creada</h2>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-300 mb-4">Pronto nuestro equipo se pondrá en contacto. Gracias.</p>
                   <button @click="handleClose" class="rounded-full bg-pink-600 px-5 py-2.5 text-white text-sm font-medium hover:bg-pink-700">
-                    Close
+                    Cerrar
                   </button>
                 </div>
               </div>

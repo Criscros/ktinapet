@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
+import { ref } from 'vue'
 import PublicFooter from '@/components/PublicFooter.vue'
+import BookingModalComponent from '@/components/BookingModalComponent.vue'
+
+const isBookingOpen = ref(false)
+const handleOpenBooking = () => { isBookingOpen.value = true }
 </script>
 
 <template>
@@ -40,9 +45,9 @@ import PublicFooter from '@/components/PublicFooter.vue'
           </nav>
 
           <!-- Booking Button -->
-          <Link href="/#booking" class="inline-flex items-center rounded-full bg-pink-600 px-6 py-3 font-semibold text-base lg:text-lg text-white hover:bg-pink-700">
+          <button type="button" @click="handleOpenBooking" class="inline-flex items-center rounded-full bg-pink-600 px-6 py-3 font-semibold text-base lg:text-lg text-white hover:bg-pink-700">
             Reservar
-          </Link>
+          </button>
         </div>
       </div>
     </header>
@@ -53,5 +58,8 @@ import PublicFooter from '@/components/PublicFooter.vue'
     </main>
 
     <PublicFooter />
+
+    <!-- Booking Modal -->
+    <BookingModalComponent :isOpen="isBookingOpen" @close="isBookingOpen = false" />
   </div>
 </template>
